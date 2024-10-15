@@ -1,0 +1,14 @@
+.container{
+    width: 100vw;
+    height: 644px;
+    margin-top: 96px;
+}
+
+.btn{
+    width: 328px;
+    height: 56px;
+    border-radius: 16px;
+    padding: 16px 32px;
+    color: #FFF;
+    background-color: #1975FF;
+}

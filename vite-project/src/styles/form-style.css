@@ -1,0 +1,65 @@
+.form{
+    margin-left: 240px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.title{
+    /* font-style: ; */
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 32px;
+    color: #141C24;
+}
+
+.description{
+    /* font-style: ; */
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    color: #141C24;
+}
+
+.code{
+    display: none;
+}
+
+.code-timer{
+    display: none;
+    /* font-style: ; */
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    color: #97A1AF;
+}
+
+.send-block{
+    display: none;
+    width: 328px;
+    height: 56px;
+    padding: 16px 70px;
+}
+
+.again-send-code{
+    /* font-style: ; */
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 24px;
+    color: #344051;
+}
+
+.again-send-code:hover{
+    cursor: pointer;
+}
+
+.actions{
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+
+}
+
+.enter{
+    display: none;
+}
