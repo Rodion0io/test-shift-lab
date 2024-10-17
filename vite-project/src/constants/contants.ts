@@ -1,0 +1,1 @@
+export const PHONE_MASK = /^(\+7|8)[0-9]{10}$/;
