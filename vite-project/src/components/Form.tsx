@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "../styles/form-style.css"
 import { checkPhoneNumber } from "../logic/checkValidation.ts";
+import { request } from "../logic/request.ts";
 
 function Form(){
 
@@ -20,7 +21,7 @@ function Form(){
                 <input type="text" className="input-field" placeholder="Телефон" onChange={changeInputPhoneState}/>
                 <input type="text" className="input-field code" placeholder="Проверочный код"/>
                 <div className="actions">
-                    <button className="btn send-phone-number" onClick={() => !checkPhoneNumber(phoneNumber) ? setNameClass("error-message active"): setNameClass("error-message")} type="button">Продолжить</button>
+                    <button className="btn send-phone-number" onClick={() => !checkPhoneNumber(phoneNumber) ? setNameClass("error-message active"): (setNameClass("error-message"), request(phoneNumber))} type="button">Продолжить</button>
                     <button className="btn enter">Войти</button>
                     <p className="code-timer">Запросить код повторно можно через 39 секунд</p>
                     <div className="send-block">
