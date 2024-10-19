@@ -1,19 +1,25 @@
 import { useEffect, useState } from "react";
 import "../styles/form-style.css";
 import { otp } from "../API/otp.ts";
-import { PHONE_MASK } from "../constants/contants.ts";
+import { PHONE_MASK, OTP_MASK } from "../constants/contants.ts";
+import { signin } from "../API/signin.ts";
 
 function Form() {
-    const [phoneNumber, setPhone] = useState<string>('');
+    const [phoneNumber, setPhoneNumber] = useState<string>('');
     const [otpCode, setOtpCode] = useState<string>('');
-    const [buttonDisables, setButtonDisabled] = useState<boolean>(false);
+    const [buttonDisabled, setButtonDisabled] = useState<boolean>(false);
     const [currentTime, setCurrentTime] = useState<number>(120);
     const [isSuccess, setIsSuccess] = useState<boolean>(false);
     const [requestFlag, setRequestFlag] = useState<boolean>(false);
     const isValidPhone: boolean = PHONE_MASK.test(phoneNumber);
+    const isValidCode: boolean = OTP_MASK.test(otpCode);
 
     const changeInputPhoneState = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setPhone(event.target.value);
+        setPhoneNumber(event.target.value);
+    };
+
+    const changeInputCodeState = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setOtpCode(event.target.value);
     };
 
     const handleClickSendPhone = async () => {
@@ -32,11 +38,16 @@ function Form() {
         }
     };
 
+    const handleClickSendCode = async () => {
+        if (isValidCode && isValidPhone){
+            await signin(phoneNumber, otpCode).then(() => console.log("ok"));
+        }
+    }
+
     useEffect(() => {
         if (currentTime > 0 && requestFlag) {
-            console.log(requestFlag);
             const timer = setInterval(() => {
-                setCurrentTime((time) => time - 1);
+                setCurrentTime(time => time - 1);
             }, 1000);
 
             return () => clearInterval(timer);
@@ -54,14 +65,17 @@ function Form() {
                 className="input-field"
                 placeholder="Телефон"
                 onChange={changeInputPhoneState}
-                style={{ border: !isSuccess && phoneNumber.length !== 0 ? "1px solid red" : "1px solid #CED2DA" }}
+                style={{ border: !isSuccess && phoneNumber.length !== 0
+                     ? "1px solid red" : "1px solid #CED2DA" }}
             />
-            <input type="text" className="input-field code" placeholder="Проверочный код"
-            style={{ display: isSuccess ? "block" : "none" }} />
+            <input type="text" className="input-field code"
+             placeholder="Проверочный код"
+            style={{ display: isSuccess ? "block" : "none" }}
+            onChange={changeInputCodeState} />
             <div className="actions">
                 <button className="btn send-phone-number" onClick={handleClickSendPhone} type="button"
-                 disabled={buttonDisables ? true : false}>Продолжить</button>
-                <button className="btn enter" style={{ display: isSuccess ? "block" : "none" }} type="button">Войти</button>
+                 disabled={buttonDisabled ? true : false}>Продолжить</button>
+                <button className="btn enter" style={{ display: isSuccess ? "block" : "none" }} type="button" onClick={handleClickSendCode}>Войти</button>
                 <p className="code-timer" style={{ display: isSuccess && currentTime !== 0 ? "block" : "none" }}>
                     Запросить код повторно можно через {currentTime} секунд
                 </p>

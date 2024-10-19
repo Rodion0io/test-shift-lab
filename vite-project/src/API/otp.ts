@@ -1,11 +1,11 @@
-import { URL } from "../constants/contants.ts"
+import { OTP_URL } from "../constants/contants.ts"
 
 export const otp = async (phone: string) => {
     const headers = {
         "Content-Type": "application/json"
     }
 
-    return await fetch(URL, {
+    return await fetch(OTP_URL, {
         method: "POST",
         body: JSON.stringify({"phone": phone}),
         headers: headers
