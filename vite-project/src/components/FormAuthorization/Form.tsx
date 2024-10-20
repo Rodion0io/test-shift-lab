@@ -17,11 +17,11 @@ function Form() {
      ((phoneNumber[0] === "+" && phoneNumber.length === 12) || ((phoneNumber[0] !== "+" && phoneNumber.length === 11)));
     const isValidCode: boolean = OTP_MASK.test(otpCode) && otpCode.length === 6;
 
-    const postPhoneRequest = async () => {
+    const getPostPhoneRequest = async () => {
         await otp(phoneNumber);
     }
 
-    const postOtpRequest = async () => {
+    const gуtPostOtpRequest = async () => {
         await signin(phoneNumber, otpCode).then(response => {
             if (response.status === 201){
                 setIsAuthroized(true);
@@ -35,7 +35,7 @@ function Form() {
         });
     }
 
-    const handleClickSendPhone = async () => {
+    const handleClickSendPhone = () => {
         if (currentTime === 0) {
             setIsSendet(false);
             setIsError(false);
@@ -44,12 +44,12 @@ function Form() {
         }
         setIsSendet(true);
         setIsSuccess(true);
-        postPhoneRequest();
+        getPostPhoneRequest();
         setRequestFlag(true);
     };
 
-    const handleClickSendCode = async () => {
-        postOtpRequest();
+    const handleClickSendCode = () => {
+        gуtPostOtpRequest();
     }
 
     useEffect(() => {
