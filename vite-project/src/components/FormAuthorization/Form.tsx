@@ -75,14 +75,27 @@ function Form() {
                 onChange={(e) => setPhoneNumber(e.target.value)}
                 style={{ border: !isValidPhone && phoneNumber.length !== 0
                      ? "1px solid red" : "1px solid #CED2DA" }}
-                disabled={requestFlag ? true : false}
-            />
+                disabled={requestFlag ? true : false}/>
+
+            <p className="warrning"
+            style={{ color: !isValidPhone && phoneNumber.length !== 0
+                ? "red" : "#CED2DA", display: !isValidPhone && phoneNumber.length !== 0
+                ? "block" : "none" }}
+            >Неккоректные данные</p>  
+
             <input type="text" className="input-field code"
              placeholder="Проверочный код"
             style={{ display: isSuccess ? "block" : "none",
              border: !isValidCode && otpCode.length !== 0
             ? "1px solid red" : "1px solid #CED2DA" }}
             onChange={(e) => setOtpCode(e.target.value)} />
+
+            <p className="warrning"
+            style={{ color: !isValidCode && otpCode.length !== 0
+                ? "red" : "#CED2DA", display: !isValidCode && otpCode.length !== 0
+                ? "block" : "none" }}
+            >Неккоректные данные, длина 6 символов</p>
+
             <div className="actions">
                 <button className="btn send-phone-number"
                  onClick={handleClickSendPhone} type="button"
