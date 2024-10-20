@@ -5,15 +5,15 @@ export const otp = async (phone: string) => {
         "Content-Type": "application/json"
     }
 
-    return await fetch(OTP_URL, {
-        method: "POST",
-        body: JSON.stringify({"phone": phone}),
-        headers: headers
-    }).then(response => {
-        if (response.ok){
-            return response.json();
-        }    
-    }).catch(error => {
-        console.log("Error!");
-    })
+    try {
+        const response = await fetch(OTP_URL, {
+            method: "POST",
+            body: JSON.stringify({"phone": phone}),
+            headers: headers
+        });
+        return response;
+    } catch (error) {
+        console.log("Ошибка!", error);
+        throw error;
+    }
 }

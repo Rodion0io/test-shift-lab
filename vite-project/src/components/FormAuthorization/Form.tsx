@@ -12,6 +12,7 @@ function Form() {
     const [requestFlag, setRequestFlag] = useState<boolean>(false);
     const [isAuthroized, setIsAuthroized] = useState<boolean>(false);
     const [isError, setIsError] = useState<boolean>(false);
+    const [isSendet, setIsSendet] = useState<boolean>(false);
     const isValidPhone: boolean = PHONE_MASK.test(phoneNumber) &&
      ((phoneNumber[0] === "+" && phoneNumber.length === 12) || ((phoneNumber[0] !== "+" && phoneNumber.length === 11)));
     const isValidCode: boolean = OTP_MASK.test(otpCode) && otpCode.length === 6;
@@ -22,7 +23,6 @@ function Form() {
 
     const postOtpRequest = async () => {
         await signin(phoneNumber, otpCode).then(response => {
-            console.log(response.status);
             if (response.status === 201){
                 setIsAuthroized(true);
                 setCurrentTime(120);
@@ -37,10 +37,12 @@ function Form() {
 
     const handleClickSendPhone = async () => {
         if (currentTime === 0) {
+            setIsSendet(false);
             setIsError(false);
             setCurrentTime(120);
             setRequestFlag(false);
         }
+        setIsSendet(true);
         setIsSuccess(true);
         postPhoneRequest();
         setRequestFlag(true);
@@ -85,12 +87,12 @@ function Form() {
                 <button className="btn send-phone-number"
                  onClick={handleClickSendPhone} type="button"
                  disabled={!isValidPhone ? true : false}
-                 style={{display: requestFlag || isAuthroized ? "none" : "block"}}
+                 style={{display: isAuthroized || isSendet ? "none" : "block"}}
                  >Продолжить</button>
                 <button className="btn enter"
                  style={{ display: isSuccess ? "block" : "none" }}
                   type="button" onClick={handleClickSendCode}
-                  disabled={!isValidCode ? true : false}
+                  disabled={!isValidCode || isAuthroized ? true : false}
                   >Войти</button>
                 <p className="code-timer" style={{ display: isSuccess && currentTime !== 0 &&
                      !isAuthroized ? "block" : "none" }}>
