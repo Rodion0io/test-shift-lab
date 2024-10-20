@@ -5,8 +5,10 @@
     gap: 24px;
 }
 
+
+
 .title{
-    /* font-style: ; */
+    font-family: "Inter";
     font-weight: 700;
     font-size: 24px;
     line-height: 32px;
@@ -14,7 +16,7 @@
 }
 
 .description{
-    /* font-style: ; */
+    font-family: "Inter";
     font-weight: 400;
     font-size: 16px;
     line-height: 24px;
@@ -27,14 +29,14 @@
 
 .code-timer{
     display: none;
-    /* font-style: ; */
+    font-family: "Inter";
     font-weight: 400;
     font-size: 14px;
     line-height: 20px;
     color: #97A1AF;
 }
 
-.send-block{
+.infa-block{
     display: none;
     width: 328px;
     height: 56px;
@@ -42,7 +44,7 @@
 }
 
 .again-send-code{
-    /* font-style: ; */
+    font-family: "Inter";
     font-weight: 600;
     font-size: 16px;
     line-height: 24px;
@@ -62,4 +64,11 @@
 
 .enter{
     display: none;
+}
+
+.result-message{
+    font-family: "Inter";
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 24px;
 }

@@ -10,6 +10,8 @@ function Form() {
     const [currentTime, setCurrentTime] = useState<number>(120);
     const [isSuccess, setIsSuccess] = useState<boolean>(false);
     const [requestFlag, setRequestFlag] = useState<boolean>(false);
+    const [isAuthroized, setIsAuthroized] = useState<boolean>(false);
+    const [isError, setIsError] = useState<boolean>(false);
     const isValidPhone: boolean = PHONE_MASK.test(phoneNumber) &&
      ((phoneNumber[0] === "+" && phoneNumber.length === 12) || ((phoneNumber[0] !== "+" && phoneNumber.length === 11)));
     const isValidCode: boolean = OTP_MASK.test(otpCode) && otpCode.length === 6;
@@ -19,11 +21,23 @@ function Form() {
     }
 
     const postOtpRequest = async () => {
-        await signin(phoneNumber, otpCode).then(() => console.log("ok"));
+        await signin(phoneNumber, otpCode).then(response => {
+            console.log(response.status);
+            if (response.status === 201){
+                setIsAuthroized(true);
+                setCurrentTime(120);
+                setRequestFlag(false);
+            }
+            else{
+                setIsError(true);
+                setIsAuthroized(false);
+            }
+        });
     }
 
     const handleClickSendPhone = async () => {
         if (currentTime === 0) {
+            setIsError(false);
             setCurrentTime(120);
             setRequestFlag(false);
         }
@@ -71,17 +85,24 @@ function Form() {
                 <button className="btn send-phone-number"
                  onClick={handleClickSendPhone} type="button"
                  disabled={!isValidPhone ? true : false}
-                 style={{display: requestFlag ? "none" : "block"}}
+                 style={{display: requestFlag || isAuthroized ? "none" : "block"}}
                  >Продолжить</button>
                 <button className="btn enter"
                  style={{ display: isSuccess ? "block" : "none" }}
-                  type="button" onClick={handleClickSendCode}>Войти</button>
-                <p className="code-timer" style={{ display: isSuccess && currentTime !== 0 ? "block" : "none" }}>
+                  type="button" onClick={handleClickSendCode}
+                  disabled={!isValidCode ? true : false}
+                  >Войти</button>
+                <p className="code-timer" style={{ display: isSuccess && currentTime !== 0 &&
+                     !isAuthroized ? "block" : "none" }}>
                     Запросить код повторно можно через {currentTime} секунд
                 </p>
-                <div className="send-block" style={{ display: currentTime === 0 ? "block" : "none" }}>
+                <div className="infa-block" style={{ display: currentTime === 0 && !isAuthroized ? "block" : "none" }}>
                     <p className="again-send-code" onClick={handleClickSendPhone}>Запросить код ещё раз</p>
                 </div>
+                <p className="result-message"
+                    style={{display: isAuthroized || isError ? "block" : "none",
+                color: isAuthroized ? "green" : "red"}}
+                    >{isAuthroized ? "Добро пожаловать!" : "Ошибка!"}</p>
             </div>
         </form>
     );

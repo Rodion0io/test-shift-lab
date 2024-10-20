@@ -5,15 +5,15 @@ export const signin = async (phone: string, otpCode: string) => {
         "Content-Type": "application/json"
     }
 
-    return await fetch(SIGNIN_URL, {
-        method: "POST",
-        body: JSON.stringify({"phone": phone, "code": otpCode}),
-        headers: headers
-    }).then(response => {
-        if (response.ok){
-            return response.json();
-        }    
-    }).catch(error => {
-        console.log("Error!");
-    })
+    try {
+        const response = await fetch(SIGNIN_URL, {
+            method: "POST",
+            body: JSON.stringify({ "phone": phone, "code": otpCode }),
+            headers: headers
+        });
+        return response;
+    } catch (error) {
+        console.log("Ошибка!", error);
+        throw error;
+    }
 }
