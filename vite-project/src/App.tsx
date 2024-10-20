@@ -1,5 +1,5 @@
-import Form from './components/Form.tsx'
-import './styles/App.css'
+import Form from './components/FormAuthorization/Form.tsx'
+import './App.css'
 
 function App() {
 

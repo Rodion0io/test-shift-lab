@@ -1,4 +1,4 @@
-import { SIGNIN_URL } from "../constants/contants.ts";
+import { SIGNIN_URL } from "../../../constants/contants.ts";
 
 export const signin = async (phone: string, otpCode: string) => {
     const headers = {

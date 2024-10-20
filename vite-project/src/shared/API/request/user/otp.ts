@@ -1,4 +1,4 @@
-import { OTP_URL } from "../constants/contants.ts"
+import { OTP_URL } from "../../../constants/contants.ts"
 
 export const otp = async (phone: string) => {
     const headers = {

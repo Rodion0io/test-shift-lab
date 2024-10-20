@@ -1,47 +1,39 @@
 import { useEffect, useState } from "react";
-import "../styles/form-style.css";
-import { otp } from "../API/otp.ts";
-import { PHONE_MASK, OTP_MASK } from "../constants/contants.ts";
-import { signin } from "../API/signin.ts";
+import "./form-style.css"
+import { otp } from "../../shared/API/request/user/otp.ts";
+import { PHONE_MASK, OTP_MASK } from "../../shared/constants/contants.ts";
+import { signin } from "../../shared/API/request/user/signin.ts";
 
 function Form() {
     const [phoneNumber, setPhoneNumber] = useState<string>('');
     const [otpCode, setOtpCode] = useState<string>('');
-    const [buttonDisabled, setButtonDisabled] = useState<boolean>(false);
     const [currentTime, setCurrentTime] = useState<number>(120);
     const [isSuccess, setIsSuccess] = useState<boolean>(false);
     const [requestFlag, setRequestFlag] = useState<boolean>(false);
-    const isValidPhone: boolean = PHONE_MASK.test(phoneNumber);
-    const isValidCode: boolean = OTP_MASK.test(otpCode);
+    const isValidPhone: boolean = PHONE_MASK.test(phoneNumber) &&
+     ((phoneNumber[0] === "+" && phoneNumber.length === 12) || ((phoneNumber[0] !== "+" && phoneNumber.length === 11)));
+    const isValidCode: boolean = OTP_MASK.test(otpCode) && otpCode.length === 6;
 
-    const changeInputPhoneState = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setPhoneNumber(event.target.value);
-    };
+    const postPhoneRequest = async () => {
+        await otp(phoneNumber);
+    }
 
-    const changeInputCodeState = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setOtpCode(event.target.value);
-    };
+    const postOtpRequest = async () => {
+        await signin(phoneNumber, otpCode).then(() => console.log("ok"));
+    }
 
     const handleClickSendPhone = async () => {
         if (currentTime === 0) {
             setCurrentTime(120);
             setRequestFlag(false);
         }
-        if (isValidPhone) {
-            setIsSuccess(true);
-            await otp(phoneNumber);
-            setRequestFlag(true);
-            setButtonDisabled(true);
-        } else {
-            setIsSuccess(false);
-            setCurrentTime(120);
-        }
+        setIsSuccess(true);
+        postPhoneRequest();
+        setRequestFlag(true);
     };
 
     const handleClickSendCode = async () => {
-        if (isValidCode && isValidPhone){
-            await signin(phoneNumber, otpCode).then(() => console.log("ok"));
-        }
+        postOtpRequest();
     }
 
     useEffect(() => {
@@ -64,18 +56,26 @@ function Form() {
                 type="text"
                 className="input-field"
                 placeholder="Телефон"
-                onChange={changeInputPhoneState}
-                style={{ border: !isSuccess && phoneNumber.length !== 0
+                onChange={(e) => setPhoneNumber(e.target.value)}
+                style={{ border: !isValidPhone && phoneNumber.length !== 0
                      ? "1px solid red" : "1px solid #CED2DA" }}
+                disabled={requestFlag ? true : false}
             />
             <input type="text" className="input-field code"
              placeholder="Проверочный код"
-            style={{ display: isSuccess ? "block" : "none" }}
-            onChange={changeInputCodeState} />
+            style={{ display: isSuccess ? "block" : "none",
+             border: !isValidCode && otpCode.length !== 0
+            ? "1px solid red" : "1px solid #CED2DA" }}
+            onChange={(e) => setOtpCode(e.target.value)} />
             <div className="actions">
-                <button className="btn send-phone-number" onClick={handleClickSendPhone} type="button"
-                 disabled={buttonDisabled ? true : false}>Продолжить</button>
-                <button className="btn enter" style={{ display: isSuccess ? "block" : "none" }} type="button" onClick={handleClickSendCode}>Войти</button>
+                <button className="btn send-phone-number"
+                 onClick={handleClickSendPhone} type="button"
+                 disabled={!isValidPhone ? true : false}
+                 style={{display: requestFlag ? "none" : "block"}}
+                 >Продолжить</button>
+                <button className="btn enter"
+                 style={{ display: isSuccess ? "block" : "none" }}
+                  type="button" onClick={handleClickSendCode}>Войти</button>
                 <p className="code-timer" style={{ display: isSuccess && currentTime !== 0 ? "block" : "none" }}>
                     Запросить код повторно можно через {currentTime} секунд
                 </p>
